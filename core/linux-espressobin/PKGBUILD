@@ -39,6 +39,8 @@ md5sums=('bacdb9ffdcd922aa069a5e1520160e24'
          '4e1c520bff20531939aa18b3386342af'
          'd8d30aa4a9d4c2b8d4ea53faf46ccf80')
 
+KERNEL_CROSS_FLAGS="ARCH=arm64 CROSS_COMPILE=aarch64-unknown-linux-gnueabi-"
+
 prepare() {
   cd "${srcdir}/${_srcname}"
 
@@ -66,9 +68,9 @@ prepare() {
 
 build() {
   cd "${srcdir}/${_srcname}"
-
+  
   # get kernel version
-  make prepare
+  make ${KERNEL_CROSS_FLAGS} prepare 
 
   # load configuration
   # Configure the kernel. Replace the line below with one of your choice.
@@ -92,7 +94,7 @@ build() {
 
   # build!
   unset LDFLAGS
-  make ${MAKEFLAGS} Image modules dtbs
+  make ${KERNEL_CROSS_FLAGS} ${MAKEFLAGS} Image modules dtbs
 }
 
 _package() {
@@ -110,13 +112,13 @@ _package() {
   KARCH=arm64
 
   # get kernel version
-  _kernver="$(make kernelrelease)"
+  _kernver="$(make ${KERNEL_CROSS_FLAGS} kernelrelease)"
   _basekernel=${_kernver%%-*}
   _basekernel=${_basekernel%.*}
 
   mkdir -p "${pkgdir}"/{lib/modules,lib/firmware}
-  make INSTALL_MOD_PATH="${pkgdir}" modules_install
-  make INSTALL_DTBS_PATH="${pkgdir}/boot/dtbs" dtbs_install
+  make ${KERNEL_CROSS_FLAGS} INSTALL_MOD_PATH="${pkgdir}" modules_install
+  make ${KERNEL_CROSS_FLAGS} INSTALL_DTBS_PATH="${pkgdir}/boot/dtbs" dtbs_install
   cp arch/$KARCH/boot/Image "${pkgdir}/boot"
 
   # set correct depmod command for install
