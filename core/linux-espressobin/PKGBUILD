@@ -23,8 +23,10 @@ source=("http://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar.xz"
         '0005-PCI-aardvark-use-isr1-instead-of-isr0-interrupt-in-l.patch'
         '0006-PCI-aardvark-disable-LOS-state-by-default.patch'
         '0007-PCI-aardvark-fix-PCIe-max-read-request-size-setting.patch'
+	'mwifiex.patch'
         'config'
         'linux.preset')
+
 md5sums=('bacdb9ffdcd922aa069a5e1520160e24'
          '585bffee210eeb163de08be799a838c0'
          '8a768db6cd358201ef177e70fc37277b'
@@ -33,6 +35,7 @@ md5sums=('bacdb9ffdcd922aa069a5e1520160e24'
          '6e3368423dff2950bda35b918abe6b69'
          'c0d146e04ba752b5530d6ba5c025a538'
          '2e8f49db231d5f7d56913d326f81a5b5'
+         '976a857c3415e1cda510fe94fe214758'
          '4e1c520bff20531939aa18b3386342af'
          'd8d30aa4a9d4c2b8d4ea53faf46ccf80')
 
@@ -50,6 +53,7 @@ prepare() {
   git apply ../0005-PCI-aardvark-use-isr1-instead-of-isr0-interrupt-in-l.patch
   git apply ../0006-PCI-aardvark-disable-LOS-state-by-default.patch
   git apply ../0007-PCI-aardvark-fix-PCIe-max-read-request-size-setting.patch
+  git apply ../mwifiex.patch
 
   cat "${srcdir}/config" > ./.config
 
